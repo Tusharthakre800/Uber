@@ -8,7 +8,7 @@ import ConfirmedRide from "./ConfirmedRide";
 import LookingforDriver from "../components/LookingforDriver";
 import WaitingForDriver from "../components/WaitingForDriver";
 import axios from "axios";
-import { SocketContext } from "../context/socketContext";
+import { SocketContext } from "../context/SocketContext";
 import { UserDataContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import LiveTracking from "../components/LiveTracking";

@@ -5,7 +5,7 @@ import { useRef, useState  , useEffect , useContext} from "react"
 import { useGSAP } from "@gsap/react"
 import gsap from "gsap"
 import CofirmRidePopUp from "./CofirmRidePopUp"
-import { SocketContext } from "../context/socketContext"
+import { SocketContext } from "../context/SocketContext"
 import { CaptainDataContext } from "../context/CaptainContext"
 import axios from "axios"
 
