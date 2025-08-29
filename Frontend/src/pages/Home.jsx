@@ -73,6 +73,11 @@ function Home() {
     navigate("/riding", { state: { ride: ride } });
   });
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/userlogin");
+  };
+
   const swapLocations = () => {
     const tempPickup = pickup;
     setPickup(destination);
@@ -298,12 +303,14 @@ function Home() {
 
   return (
     <div className="h-screen relative overflow-hidden">
-      <img
-        className="w-16 absolute left-5 top-5"
-        src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
-        alt=" rusgad"
-      />
-      <div className="h-4/5 w-screen z-[100000] ">
+      <button
+        onClick={handleLogout}
+        className="absolute top-5 right-5 z-50 bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition-colors"
+      >
+        <i className="text-lg font-medium ri-logout-box-r-line"></i>
+      </button>
+
+      <div className="h-4/5 w-screen z-[100000]">
         <LiveTracking />
       </div>
       <div className="  flex flex-col justify-end h-screen absolute  top-0  w-full ">

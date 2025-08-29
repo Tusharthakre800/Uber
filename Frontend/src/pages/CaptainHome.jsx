@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import CaptainDetails from "../components/CaptainDetails"
 import RidePopUp from "../components/RidePopUp"
 import { useRef, useState  , useEffect , useContext} from "react"
@@ -23,6 +23,8 @@ function CaptainHome() {
   const { socket } = useContext(SocketContext)
 
   const { captain } = useContext(CaptainDataContext)
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     socket.emit("join",{
@@ -57,6 +59,11 @@ function CaptainHome() {
     
 
 })
+
+   const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/userlogin");
+  };
 
 
   async function confirmRide() {
@@ -115,11 +122,12 @@ function CaptainHome() {
     <div className="h-screen">
     <div className="fixed p-6 top-0 flex items-center justify-between w-screen ">
       <img className="w-16 " src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
-      <Link to={"/captainlogin"}>
-        <div className=" h-10 w-10 bg-white flex items-center justify-center rounded-fullv ">
+      <button
+        onClick={handleLogout}
+        className="bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition-colors"
+      >
         <i className="text-lg font-medium ri-logout-box-r-line"></i>
-        </div>
-    </Link>
+      </button>
     </div>
     <div className="h-3/5">
         <img className="h-full w-full object-cover" src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="" />
