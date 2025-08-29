@@ -4,6 +4,7 @@ const captainModel = require('./models/captain.model');
 
 let io;
 
+
 function initializeSocket(server) {
     io = socketIo(server,{
         cors: {
