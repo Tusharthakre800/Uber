@@ -302,18 +302,18 @@ function Home() {
   };
 
   return (
-    <div className="h-screen relative overflow-hidden">
+    <div className="h-screen  relative overflow-hidden">
       <button
         onClick={handleLogout}
-        className="absolute top-5 right-5 z-50 bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition-colors"
+        className="absolute top-3  mr-16 right-1 z-50 bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition-colors"
       >
         <i className="text-lg font-medium ri-logout-box-r-line"></i>
       </button>
 
-      <div className="h-4/5 w-screen z-[100000]">
+      <div className="h-[100%] w-screen absolute top-0 left-0">
         <LiveTracking />
       </div>
-      <div className="  flex flex-col justify-end h-screen absolute  top-0  w-full ">
+      <div className="  flex flex-col justify-end h-screen   z-20  top-0  w-full ">
         <div className="h-[28%] p-6 bg-white relative">
           <h5
             ref={panelCloseRef}
@@ -324,7 +324,7 @@ function Home() {
           </h5>
           <h4 className="text-2xl font-semibold">Find a trip</h4>
           <form
-            className="relative "
+            className="relative  "
             onSubmit={(e) => {
               submitHandler(e);
             }}

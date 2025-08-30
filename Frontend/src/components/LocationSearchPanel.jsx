@@ -11,7 +11,7 @@ const LocationSearchPanel = ({ suggestions, setPanelOpen , setVehiclePanel , set
     console.log(suggestions)
 
     return (
-        <div className="p-4 bg-white  shadow-lg max-w-md mx-auto max-h-[466px] overflow-y-auto">
+        <div className="p-4 bg-white  mt-6 shadow-lg max-w-md mx-auto max-h-[466px] overflow-y-auto relative ">
             {/* Display fetched suggestions */}
             {
                 suggestions.map((elem, idx) => (
