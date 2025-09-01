@@ -96,7 +96,7 @@ function Home() {
           },
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
       setPickupSuggestions(response.data);
     } catch (error) {
       console.log("error", error);
@@ -305,7 +305,7 @@ function Home() {
     <div className="h-screen  relative overflow-hidden">
       <button
         onClick={handleLogout}
-        className="absolute top-3  mr-16 right-1 z-50 bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition-colors"
+        className="absolute top-2  mr-16 right-1 z-50 bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition-colors"
       >
         <i className="text-lg font-medium ri-logout-box-r-line"></i>
       </button>

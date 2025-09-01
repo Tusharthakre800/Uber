@@ -51,7 +51,7 @@ function CaptainHome() {
   },[])
  
   socket.on('new-ride', (data) => {
-    console.log(data);    
+    // console.log(data);    
     setRide(data)
     
     setRidePopupPanel(true)
@@ -78,7 +78,7 @@ function CaptainHome() {
       } }
   )
 
-    console.log(response);
+    // console.log(response);
     
   // console.log(response);
   setRidePopupPanel(false)

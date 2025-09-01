@@ -31,7 +31,7 @@ module.exports.getDistanceTime = async (req, res) => {
         
         const { origin, destination } = req.query;
         const distanceAndTime = await mapService.getDistanceTime(origin, destination);
-        console.log(distanceAndTime);
+        // console.log(distanceAndTime);
         
         res.status(200).json(distanceAndTime);
     } catch (error) {

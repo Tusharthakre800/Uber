@@ -42,7 +42,7 @@ module.exports.createRide = async (req, res) => {
     
 
     }catch (error) {
-        console.log(error);   
+        // console.log(error);   
         res.status(500).json({ error: error.message });
     }
 }
@@ -80,7 +80,7 @@ module.exports.confirmRide = async (req, res) => {
 
     }
     catch (error) {
-        console.log(error);
+        // console.log(error);
        return res.status(500).json({ error: error.message });
 
 }
@@ -103,7 +103,7 @@ module.exports.startRide = async (req, res) => {
 
         return res.status(200).json(ride);
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         return res.status(500).json({ error: error.message });
     }
 }
@@ -126,7 +126,7 @@ module.exports.endRide = async (req, res) => {
         return res.status(200).json(ride);
     }
     catch (error) {
-        console.log(error);
+        // console.log(error);
         return res.status(500).json({ error: error.message });
     }
 }

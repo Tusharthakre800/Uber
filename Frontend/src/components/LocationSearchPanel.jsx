@@ -8,7 +8,7 @@ const LocationSearchPanel = ({ suggestions, setPanelOpen , setVehiclePanel , set
         }
     }
 
-    console.log(suggestions)
+    // console.log(suggestions)
 
     return (
         <div className="p-4 bg-white  mt-6 shadow-lg max-w-md mx-auto max-h-[466px] overflow-y-auto relative ">
