@@ -1,4 +1,7 @@
 const captainModel = require('../models/captain.model');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const captainService = require('../services/captain.service');
 const {body, validationResult } = require("express-validator");
 const blacklistTokenModel = require('../models/backlistToken.model');
@@ -83,3 +86,86 @@ module.exports.logoutCaptain = async (req, res, next) =>{
 
 
 }
+
+
+// Add these new functions to the existing captain controller
+
+const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        
+        const captain = await captainModel.findOne({ email });
+        if (!captain) {
+            return res.status(404).json({
+                message: 'Captain not found with this email'
+            });
+        }
+
+        // Generate reset token
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+        // Set reset token and expiry (1 hour)
+        captain.resetPasswordToken = hashedToken;
+        captain.resetPasswordExpires = Date.now() + 60 * 60 * 1000; // 1 hour
+        await captain.save();
+
+        // TODO: Send email with reset link
+        // For now, return the token in response for testing
+        res.status(200).json({
+            message: 'Password reset token sent to email',
+            resetToken: resetToken, // Remove this in production
+            email: email
+        });
+
+    } catch (error) {
+        console.error('Forgot password error:', error);
+        res.status(500).json({
+            message: 'Server error during password reset request'
+        });
+    }
+};
+
+const resetPassword = async (req, res) => {
+    try {
+        const { token } = req.params;
+        const { newPassword } = req.body;
+
+        // Hash the token to match stored version
+        const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+        const captain = await captainModel.findOne({
+            resetPasswordToken: hashedToken,
+            resetPasswordExpires: { $gt: Date.now() }
+        });
+
+        if (!captain) {
+            return res.status(400).json({
+                message: 'Invalid or expired reset token'
+            });
+        }
+
+        // Update password
+        captain.password = await captainModel.hashPassword(newPassword);
+        captain.resetPasswordToken = null;
+        captain.resetPasswordExpires = null;
+        await captain.save();
+
+        res.status(200).json({
+            message: 'Password reset successful'
+        });
+
+    } catch (error) {
+        console.error('Reset password error:', error);
+        res.status(500).json({
+            message: 'Server error during password reset'
+        });
+    }
+};
+
+// Make sure to export these functions along with existing ones
+module.exports = {
+    ...existingExports,
+    forgotPassword,
+    resetPassword
+};

@@ -57,7 +57,6 @@ function CaptainHome() {
     setRidePopupPanel(true)
     // console.log(setRide);
     
-
 })
 
    const handleLogout = () => {

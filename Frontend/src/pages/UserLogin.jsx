@@ -276,8 +276,15 @@ function UserLogin() {
             </div>
           </div>
 
+         <div className="text-right mb-4">
+             <Link 
+                 to="/user-forgot-password" 
+                 className={`text-sm ${isDarkMode ? 'text-purple-400 hover:text-purple-300' : 'text-blue-600 hover:text-blue-500'}`}
+             >
+                 Forgot Password?
+             </Link>
+         </div>
          
-
           <button
             type="submit"
             disabled={isLoading}

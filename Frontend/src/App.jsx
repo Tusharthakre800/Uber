@@ -16,6 +16,12 @@ import "remixicon/fonts/remixicon.css"
 import Payment from './pages/Payment'
 import Terms from './pages/Terms'
 import  Policy from './pages/Policy'
+// Add these imports
+import UserForgotPassword from './pages/UserForgotPassword';
+import UserResetPassword from './pages/UserResetPassword';
+// Add these imports
+// import CaptainForgotPassword from './pages/CaptainForgotPassword';
+// import CaptainResetPassword from './pages/CaptainResetPassword';
 
 function App() {
 
@@ -45,6 +51,10 @@ function App() {
         </CaptainProtectedWrapper>
       } />
       <Route path="/payment" element={<Payment />} />
+      <Route path="/user-forgot-password" element={<UserForgotPassword />} />
+      <Route path="/user-reset-password/:token" element={<UserResetPassword />} />
+      {/* <Route path="/captain-forgot-password" element={<CaptainForgotPassword />} />
+      <Route path="/captain-reset-password/:token" element={<CaptainResetPassword />} /> */}
     </Routes>
     </>
   )
