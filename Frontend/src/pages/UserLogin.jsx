@@ -27,9 +27,7 @@ function UserLogin() {
   const logoRef = useRef(null);
   const formRef = useRef(null);
   const titleRef = useRef(null);
-  const subtitleRef = useRef(null);
-
-  
+  const subtitleRef = useRef(null);  
 
   useEffect(() => {
     // Enhanced animations
