@@ -10,12 +10,11 @@
     "preview": "vite preview",
     "@react-oauth/google": "^0.12.2",
     "axios": "^1.7.8",
-
-   "gsap": "^3.12.5",
+    "gsap": "^3.12.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-     "react-google-login": "^5.2.2",
-   "react-hot-toast": "^2.6.0",
+    "react-google-login": "^5.2.2",
+    "react-hot-toast": "^2.6.0",
     "react-icons": "^5.5.0",
     "react-qr-code": "^2.0.15",
     "react-qr-reader": "^3.0.0-beta-1",
@@ -40,4 +39,3 @@
     "vite": "^6.0.1"
   }
 }
-  
