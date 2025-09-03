@@ -166,7 +166,7 @@ const resetPassword = async (req, res) => {
 
 // Make sure to export these functions along with existing ones
 module.exports = {
-    ...existingExports,
+    // ...existingExports,
     forgotPassword,
     resetPassword
 };
