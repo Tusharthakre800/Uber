@@ -425,6 +425,7 @@ function CaptainSignup() {
                   min="1"
                   max="4"
                 />
+                
                 <select
                   className={`px-4 py-3 rounded-xl border transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer ${
                     isDarkMode
