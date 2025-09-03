@@ -8,6 +8,7 @@ const blacklistTokenModel = require('../models/backlistToken.model');
 // const generateAuthToken = require('../middlewares/auth.middleware');
 
 
+
 module.exports.registerCaptain = async (req, res, next) => {
 
     const errors = validationResult(req);
