@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-     "preinstall": "npm install --legacy-peer-deps"
+     "preinstall": "npm install"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
