@@ -6,6 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 const UserForgotPassword = () => {
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
