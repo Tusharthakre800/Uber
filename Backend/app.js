@@ -29,8 +29,13 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+
+// Backend/app.js - Add these headers before routes
 app.use((req, res, next) => {
   res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  res.setHeader('Cross-Origin-Embedder-Policy', 'cross-origin');
+  res.setHeader('Access-Control-Allow-Origin', 'https://uber-six-bice.vercel.app');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   next();
 });
 
