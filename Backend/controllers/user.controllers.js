@@ -4,6 +4,9 @@ const {body, validationResult} = require("express-validator");
 const blacklistTokenModel = require('../models/backlistToken.model');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const { OAuth2Client } = require('google-auth-library');
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 module.exports.registerUser = async (req, res,next) => {
     
@@ -163,5 +166,49 @@ module.exports.resetPassword = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+module.exports.googleLoginUser = async (req, res) => {
+    const { credential } = req.body;
+
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const payload = ticket.getPayload();
+        const { sub, email, given_name, family_name, picture } = payload;
+
+        let user = await userModel.findOne({ email });
+
+        if (!user) {
+            user = await userService.createGoogleUser({
+            firstname: given_name,
+            lastname: family_name,
+            email,
+            googleId: sub,
+            isEmailVerified: true,
+            avatar: picture
+        });
+        } else {
+            // Update existing user with Google info
+            if (!user.googleId) {
+                user.googleId = sub;
+                user.isEmailVerified = true;
+                user.avatar = picture;
+                await user.save();
+            }
+        }
+
+        const token = user.generateAuthToken();
+        
+        res.cookie('token', token);
+        res.status(200).json({ token, user });
+
+    } catch (error) {
+        console.error('Google login error:', error);
+        res.status(401).json({ message: 'Invalid Google token' });
     }
 };

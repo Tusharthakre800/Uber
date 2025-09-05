@@ -1,8 +1,8 @@
 import { useContext, useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserDataContext } from "../context/UserContext";
-import { useNavigate } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
 import gsap from "gsap";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -139,6 +139,41 @@ function UserLogin() {
     }
   };
 
+    const googleLoginHandler = async (credentialResponse) => {
+    try {
+      setIsLoading(true);
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/users/google-login`,
+        { credential: credentialResponse.credential }
+      );
+
+      if (response.status === 200) {
+        const { user, token } = response.data;
+        setUser(user);
+        localStorage.setItem("token", token);
+        
+        toast.success("Welcome back!", {
+          style: {
+            backgroundColor: isDarkMode ? "#1f2937" : "#ffffff",
+            color: isDarkMode ? "#ffffff" : "#000000",
+          }
+        });
+        
+        setTimeout(() => navigate("/home"), 1000);
+      }
+    } catch (error) {
+      const message = error.response?.data?.message || "Google login failed";
+      setError(message);
+      toast.error(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const googleLoginError = () => {
+    toast.error("Google login failed. Please try again.");
+  };
+
   return (
     <div 
       ref={containerRef}
@@ -229,7 +264,7 @@ function UserLogin() {
               className={`w-full px-4 py-3 rounded-xl border transition-all duration-300 focus:outline-none focus:ring-2 ${
                 isDarkMode 
                   ? 'bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:ring-purple-500 focus:border-transparent' 
-                  : 'bg-white/80 border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-blue-500 focus:border-transparent'
+                  : 'bg-white/80 border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-transparent'
               } backdrop-blur-sm`}
               placeholder="Enter your email"
               required
@@ -250,7 +285,7 @@ function UserLogin() {
                 className={`w-full px-4 py-3 pr-12 rounded-xl border transition-all duration-300 focus:outline-none focus:ring-2 ${
                   isDarkMode 
                     ? 'bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:ring-purple-500 focus:border-transparent' 
-                    : 'bg-white/80 border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-blue-500 focus:border-transparent'
+                    : 'bg-white/80 border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-transparent'
                 } backdrop-blur-sm`}
                 placeholder="Enter your password"
                 required
@@ -279,7 +314,7 @@ function UserLogin() {
          <div className="text-right mb-4">
              <Link 
                  to="/user-forgot-password" 
-                 className={`text-sm ${isDarkMode ? 'text-purple-400 hover:text-purple-300' : 'text-blue-600 hover:text-blue-500'}`}
+                 className={`text-sm ${isDarkMode ? 'text-purple-400 hover:text-purple-300' : 'text-purple-600 hover:text-purple-500'}`}
              >
                  Forgot Password?
              </Link>
@@ -311,12 +346,40 @@ function UserLogin() {
               className={`font-medium transition-colors ${
                 isDarkMode 
                   ? 'text-purple-400 hover:text-purple-300' 
-                  : 'text-blue-600 hover:text-blue-500'
+                  : 'text-purple-600 hover:text-purple-500'
               }`}
             >
               Create Account
             </Link>
           </p>
+          <div className="mt-6">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className={`w-full border-t ${
+                isDarkMode ? 'border-gray-600' : 'border-gray-300'
+              }`}></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className={`px-2 ${
+                isDarkMode ? 'bg-gray-800 text-gray-400' : 'bg-white text-gray-500'
+              }`}>
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-6 flex justify-center">
+            <GoogleLogin
+              onSuccess={googleLoginHandler}
+              onError={googleLoginError}
+              useOneTap
+              theme={isDarkMode ? "filled_black" : "outline"}
+              size="large"
+              text="signin_with"
+              shape="pill"
+            />
+          </div>
+        </div>
           
           <Link 
             to="/captainLogin"

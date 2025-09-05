@@ -1,11 +1,10 @@
 const captainModel = require('../models/captain.model');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+
 const crypto = require('crypto');
 const captainService = require('../services/captain.service');
 const {body, validationResult } = require("express-validator");
 const blacklistTokenModel = require('../models/backlistToken.model');
-// const generateAuthToken = require('../middlewares/auth.middleware');
+
 
 
 const registerCaptain = async (req, res, next) => {
@@ -163,7 +162,6 @@ const resetPassword = async (req, res) => {
     }
 };
 
-// Make sure to export these functions along with existing ones
 module.exports = {
     // ...existingExports,
     forgotPassword,
@@ -171,5 +169,5 @@ module.exports = {
     registerCaptain,
     loginCaptain,
     getCaptainProfile,
-    logoutCaptain,
+    logoutCaptain
 };

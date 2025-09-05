@@ -1,6 +1,3 @@
-const dotenv = require('dotenv');
-
-dotenv.config();
 
 const express = require('express');
 const cors = require('cors');
@@ -12,7 +9,9 @@ const captainRouters = require('./routes/captain.routes');
 const mapRoutes = require('./routes/maps.routes');
 const rideRoutes = require('./routes/ride.routes');
 
+const dotenv = require('dotenv');
 
+dotenv.config();
 connectTodb();
 
 const cookiesParser = require('cookie-parser');

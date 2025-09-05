@@ -8,10 +8,21 @@ const userSchema = new mongoose.Schema({
     lastname:{ type: String, minlength:[3, 'Last name must be at least 3 characters long'] }
    },
    email: { type: String, required: true, unique: true, minlength: [7, 'Email must be at least 7 characters long'] },
-   password: { type: String, required: true, select: false, minlength: [3, 'Password must be at least 3 characters long'] },
+   password: { type: String, select: false, minlength: [3, 'Password must be at least 3 characters long'] },
    socketId:{ type: String },
    resetPasswordToken: { type: String, default: undefined },
-   resetPasswordExpires: { type: Date, default: undefined }
+   resetPasswordExpires: { type: Date, default: undefined },
+   // Add these fields to the user schema
+   googleId: {
+       type: String,
+       unique: true,
+       sparse: true
+   },
+   isEmailVerified: {
+       type: Boolean,
+       default: false
+   },
+ 
 });
 
 userSchema.methods.generateAuthToken = function(){

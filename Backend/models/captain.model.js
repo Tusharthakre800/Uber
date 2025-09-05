@@ -69,7 +69,6 @@ const captainSchema = new mongoose.Schema({
         }
     }
 
-
 });
 
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CaptainDataContext } from "../context/CaptainContext";
+import { GoogleLogin } from "@react-oauth/google";
 import gsap from "gsap";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,7 +17,7 @@ function CaptainLogin() {
     const savedMode = localStorage.getItem('darkMode');
     return savedMode ? JSON.parse(savedMode) : false;
   });
-  const { captain, setCaptain } = React.useContext(CaptainDataContext);
+  const { setCaptain } = React.useContext(CaptainDataContext);
   const navigate = useNavigate();
 
   // Refs for animations
@@ -142,22 +143,57 @@ function CaptainLogin() {
     }
   };
 
+  const googleLoginHandler = async (credentialResponse) => {
+    try {
+      setIsLoading(true);
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/captains/google-login`,
+        { credential: credentialResponse.credential }
+      );
+
+      if (response.status === 200) {
+        const { captain, token } = response.data;
+        setCaptain(captain);
+        localStorage.setItem("token", token);
+        
+        toast.success("Welcome back, Captain!", {
+          style: {
+            backgroundColor: isDarkMode ? "#1f2937" : "#ffffff",
+            color: isDarkMode ? "#ffffff" : "#000000",
+          }
+        });
+        
+        setTimeout(() => navigate("/captain-home"), 1000);
+      }
+    } catch (error) {
+      const message = error.response?.data?.message || "Google login failed";
+      setError(message);
+      toast.error(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const googleLoginError = () => {
+    toast.error("Google login failed. Please try again.");
+  };
+
   return (
     <div 
       ref={containerRef}
       className={`min-h-screen flex items-center justify-center p-4 transition-all duration-500 ${
         isDarkMode 
           ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' 
-          : 'bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50'
+          : 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'
       }`}
     >
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className={`absolute -top-40 -right-40 w-80 h-80 rounded-full opacity-20 ${
-          isDarkMode ? 'bg-purple-600' : 'bg-purple-400'
+          isDarkMode ? 'bg-purple-600' : 'bg-blue-400'
         } blur-3xl`}></div>
         <div className={`absolute -bottom-40 -left-40 w-80 h-80 rounded-full opacity-20 ${
-          isDarkMode ? 'bg-pink-600' : 'bg-pink-400'
+          isDarkMode ? 'bg-indigo-600' : 'bg-purple-400'
         } blur-3xl`}></div>
       </div>
 
@@ -279,18 +315,27 @@ function CaptainLogin() {
             </div>
           </div>
 
-         <button
+          {/* <div className="text-right mb-4">
+            <Link 
+              to="/captain-forgot-password" 
+              className={`text-sm ${isDarkMode ? 'text-purple-400 hover:text-purple-300' : 'text-purple-600 hover:text-purple-500'}`}
+            >
+              Forgot Password?
+            </Link>
+          </div> */}
+          
+          <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-black text-white px-2 py-2 rounded-2xl "
+            className="w-full bg-black text-white px-2 py-2 rounded-2xl"
           >
             {isLoading ? (
               <div className="flex items-center justify-center">
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                signing in...
+                Signing in...
               </div>
             ) : (
-              'Sign in as Captain'
+              'Sign In'
             )}
           </button>
         </form>
@@ -308,10 +353,10 @@ function CaptainLogin() {
                   : 'text-purple-600 hover:text-purple-500'
               }`}
             >
-              Create Captain Account
+              Create Account
             </Link>
           </p>
-          
+            
           <Link 
             to="/userLogin"
             className={`inline-flex items-center px-6 py-2 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 ${
