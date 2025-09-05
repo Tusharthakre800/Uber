@@ -5,6 +5,7 @@ const blacklistTokenModel = require('../models/backlistToken.model');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const { OAuth2Client } = require('google-auth-library');
+const app = require('../app');
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 

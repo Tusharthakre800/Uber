@@ -27,6 +27,7 @@ router.post('/reset-password', [
 
 router.get("/profile",authMiddleware.authUser,userController.getUserProfile);
 router.get("/logout",authMiddleware.authUser,userController.logoutUser);
+
 router.post('/google-login', userController.googleLoginUser);
 
 module.exports = router;
