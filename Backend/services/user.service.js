@@ -43,7 +43,7 @@ module.exports.createGoogleUser = async({
         email,
         googleId,
         isEmailVerified: isEmailVerified || true,
-        avatar: avatar || null
+        
     })
 
     return user

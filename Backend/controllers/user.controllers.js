@@ -180,7 +180,7 @@ module.exports.googleLoginUser = async (req, res) => {
         });
 
         const payload = ticket.getPayload();
-        const { sub, email, given_name, family_name, picture } = payload;
+        const { sub, email, given_name, family_name } = payload;
 
         let user = await userModel.findOne({ email });
 
@@ -191,14 +191,12 @@ module.exports.googleLoginUser = async (req, res) => {
             email,
             googleId: sub,
             isEmailVerified: true,
-            avatar: picture
         });
         } else {
             // Update existing user with Google info
             if (!user.googleId) {
                 user.googleId = sub;
                 user.isEmailVerified = true;
-                user.avatar = picture;
                 await user.save();
             }
         }
