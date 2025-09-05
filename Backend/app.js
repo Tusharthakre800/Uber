@@ -34,7 +34,6 @@ app.use(express.urlencoded({extended: true}));
 app.use((req, res, next) => {
   res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
   res.setHeader('Cross-Origin-Embedder-Policy', 'cross-origin');
-  res.setHeader('Access-Control-Allow-Origin', 'https://uber-six-bice.vercel.app');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   next();
 });
