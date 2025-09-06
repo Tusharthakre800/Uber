@@ -7,7 +7,12 @@ const nodemailer = require('nodemailer');
 const { OAuth2Client } = require('google-auth-library');
 const app = require('../app');
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+// OAuth2Client setup में CLIENT_SECRET use करें:
+const client = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  'postmessage' // redirect URI
+);
 
 module.exports.registerUser = async (req, res,next) => {
     
