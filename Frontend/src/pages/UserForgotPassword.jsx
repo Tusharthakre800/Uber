@@ -12,7 +12,10 @@ const UserForgotPassword = () => {
         e.preventDefault();
         setIsLoading(true);
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/forgot-password`, { email });
+            const response = await axios.post(
+                `${import.meta.env.VITE_BASE_URL}/users/forgot-password`, 
+                { email }
+            );
             toast.success(response.data.message);
         } catch (error) {
             toast.error(error.response?.data?.message || 'Something went wrong');

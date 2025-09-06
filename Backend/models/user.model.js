@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema({
        type: Boolean,
        default: false
    },
+    resetPasswordExpires: { type: Date, default: undefined }
  
 });
 

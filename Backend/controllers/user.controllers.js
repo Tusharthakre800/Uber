@@ -93,29 +93,25 @@ module.exports.logoutUser = async (req, res) =>{
 }
 
 module.exports.forgotPassword = async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
     const { email } = req.body;
-
+    
     try {
+        // यहाँ database से user find कर रहा है
         const user = await userModel.findOne({ email });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Generate reset token
+        // Reset token generate करता है
         const resetToken = crypto.randomBytes(32).toString('hex');
         const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
 
-        // Set token and expiry (10 minutes)
+        // Token save करता है user record में
         user.resetPasswordToken = hashedToken;
-        user.resetPasswordExpires = Date.now() + 10 * 60 * 1000;
+        user.resetPasswordExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
         await user.save();
 
-        // Send email
+        // Email send करता है
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -136,9 +132,8 @@ module.exports.forgotPassword = async (req, res) => {
         await transporter.sendMail(mailOptions);
 
         res.status(200).json({ message: 'Password reset email sent successfully' });
-
     } catch (error) {
-        res.status(500).json({ message: 'Server error', error: error.message });
+        res.status(500).json({ message: 'Server error' });
     }
 };
 
