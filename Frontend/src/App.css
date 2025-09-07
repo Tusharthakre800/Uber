@@ -1,0 +1,19 @@
+/* GSAP 404 Page Enhancements */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.8; }
+}
+
+.bg-star {
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+/* Road animation */
+@keyframes roadMove {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100vw); }
+}
+
+.road-line {
+  animation: roadMove 2s linear infinite;
+}

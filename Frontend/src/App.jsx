@@ -22,6 +22,10 @@ import UserResetPassword from './pages/UserResetPassword';
 // Add these imports
 // import CaptainForgotPassword from './pages/CaptainForgotPassword';
 // import CaptainResetPassword from './pages/CaptainResetPassword';
+// Add this import at the top
+import NotFound from './pages/NotFound';
+
+// Add this route at the bottom of your routes (after all other routes)
 
 function App() {
 
@@ -53,6 +57,7 @@ function App() {
       <Route path="/payment" element={<Payment />} />
       <Route path="/user-forgot-password" element={<UserForgotPassword />} />
       <Route path="/user-reset-password/:token" element={<UserResetPassword />} />
+      <Route path="*" element={<NotFound />} />
       {/* <Route path="/captain-forgot-password" element={<CaptainForgotPassword />} />
       <Route path="/captain-reset-password/:token" element={<CaptainResetPassword />} /> */}
     </Routes>
