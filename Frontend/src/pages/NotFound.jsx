@@ -40,7 +40,12 @@ const NotFound = () => {
       duration: 0.8,
       ease: "power2.out"
     }, "-=0.5")
-  
+    .from(buttonsRef.current, {
+      y: 50,
+      opacity: 0,
+      duration: 0.8,
+      ease: "power2.out"
+    }, "-=0.3");
 
     // Car floating animation
     gsap.to(carRef.current, {
@@ -70,7 +75,7 @@ const NotFound = () => {
 
       gsap.to(carRef.current, {
         x: xPos,
-        y: yPos - 20, // -20 to account for floating animation
+        y: yPos - 20,
         duration: 0.5,
         ease: "power2.out"
       });
@@ -83,7 +88,21 @@ const NotFound = () => {
     };
   }, []);
 
+  const handleButtonHover = (e, scale = 1.05) => {
+    gsap.to(e.target, {
+      scale: scale,
+      duration: 0.3,
+      ease: "power2.out"
+    });
+  };
 
+  const handleButtonLeave = (e) => {
+    gsap.to(e.target, {
+      scale: 1,
+      duration: 0.3,
+      ease: "power2.out"
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black overflow-hidden">
@@ -133,24 +152,19 @@ const NotFound = () => {
             </p>
           </div>
 
-          {/* Additional Links */}
-          <div className="mt-12">
-            <p className="text-gray-400 mb-4">Popular destinations:</p>
-            <div className="flex flex-wrap gap-6 justify-center">
-              <Link 
-                to="/userlogin" 
-                className="text-blue-400 hover:text-blue-300 transition-colors duration-300 hover:underline"
-              >
-                Sign In
-              </Link>
-              <Link 
-                to="/captainlogin" 
-                className="text-blue-400 hover:text-blue-300 transition-colors duration-300 hover:underline"
-              >
-                Become a Driver
-              </Link>
-            </div>
+          {/* Modern Action Buttons */}
+          <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
+            <Link
+              to="/"
+              onMouseEnter={(e) => handleButtonHover(e)}
+              onMouseLeave={handleButtonLeave}
+              className="group relative flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-semibold backdrop-blur-sm border border-blue-500/50 hover:from-blue-500 hover:to-purple-500 transition-all duration-300 shadow-xl hover:shadow-2xl"
+            >
+              <FaHome className="group-hover:animate-bounce" />
+              Go Home
+            </Link>
           </div>
+        
         </div>
 
         {/* Road Lines Animation */}
