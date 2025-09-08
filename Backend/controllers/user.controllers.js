@@ -11,8 +11,9 @@ const app = require('../app');
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  
-  'postmessage' // redirect URI
+  process.env.NODE_ENV === 'production' 
+    ? `${process.env.BACKEND_URL}/users/google-login` 
+    : 'postmessage'
 );
 
 module.exports.registerUser = async (req, res,next) => {
