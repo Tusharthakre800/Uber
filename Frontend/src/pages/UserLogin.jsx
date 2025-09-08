@@ -2,7 +2,7 @@ import { useContext, useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserDataContext } from "../context/UserContext";
-import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google"; // Updated import
 import gsap from "gsap";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,6 +20,49 @@ function UserLogin() {
 
   const { setUser } = useContext(UserDataContext);
   const navigate = useNavigate();
+
+  // Google Login Hook
+  const googleLogin = useGoogleLogin({
+    flow: 'auth-code',
+    redirect_uri: import.meta.env.NODE_ENV === 'production' 
+      ? 'https://uber-v29m.onrender.com/users/google-login'
+      : 'http://localhost:3000/users/google-login',
+    ux_mode: 'popup',
+    onSuccess: async (codeResponse) => {
+      try {
+        setIsLoading(true);
+        const response = await axios.post(
+          `${import.meta.env.VITE_BASE_URL}/users/google-login`,
+          { credential: codeResponse.code }
+        );
+
+        if (response.status === 200) {
+          const { user, token } = response.data;
+          setUser(user);
+          localStorage.setItem("token", token);
+          
+          toast.success("Welcome back!", {
+            style: {
+              backgroundColor: isDarkMode ? "#1f2937" : "#ffffff",
+              color: isDarkMode ? "#ffffff" : "#000000",
+            }
+          });
+          
+          setTimeout(() => navigate("/home"), 1000);
+        }
+      } catch (error) {
+        const message = error.response?.data?.message || "Google login failed";
+        setError(message);
+        toast.error(message);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    onError: (error) => {
+      console.error('Google login error:', error);
+      toast.error("Google login failed. Please try again.");
+    }
+  });
 
   // Refs for animations
   const containerRef = useRef(null);
@@ -369,15 +412,7 @@ function UserLogin() {
           </div>
 
           <div className="mt-6 flex justify-center">
-            <GoogleLogin
-              onSuccess={googleLoginHandler}
-              onError={googleLoginError}
-              useOneTap
-              theme={isDarkMode ? "filled_black" : "outline"}
-              size="large"
-              text="signin_with"
-              shape="pill"
-            />
+            <GoogleLoginButton />
           </div>
         </div>
           

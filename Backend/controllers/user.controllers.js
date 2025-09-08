@@ -7,13 +7,12 @@ const nodemailer = require('nodemailer');
 const { OAuth2Client } = require('google-auth-library');
 const app = require('../app');
 
-// Update OAuth client configuration
+// OAuth2Client setup में CLIENT_SECRET use करें:
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  process.env.NODE_ENV === 'production' 
-    ? `${process.env.BACKEND_URL}/users/google-login` 
-    : 'postmessage'
+  
+  'postmessage' // redirect URI
 );
 
 module.exports.registerUser = async (req, res,next) => {
@@ -172,108 +171,44 @@ module.exports.resetPassword = async (req, res) => {
     }
 };
 
-// module.exports.googleLoginUser = async (req, res) => {
-//     const { credential } = req.body;
-
-//     try {
-//         const ticket = await client.verifyIdToken({
-//             idToken: credential,
-//             audience: process.env.GOOGLE_CLIENT_ID,
-//         });
-
-//         const payload = ticket.getPayload();
-//         const { sub, email, given_name, family_name } = payload;
-
-//         let user = await userModel.findOne({ email });
-
-//         if (!user) {
-//             user = await userService.createGoogleUser({
-//             firstname: given_name,
-//             lastname: family_name,
-//             email,
-//             googleId: sub,
-//             isEmailVerified: true,
-//         });
-//         } else {
-//             // Update existing user with Google info
-//             if (!user.googleId) {
-//                 user.googleId = sub;
-//                 user.isEmailVerified = true;
-//                 await user.save();
-//             }
-//         }
-
-//         const token = user.generateAuthToken();
-        
-//         res.cookie('token', token);
-//         res.status(200).json({ token, user });
-
-//     } catch (error) {
-//         console.error('Google login error:', error);
-//         res.status(401).json({ message: 'Invalid Google token' });
-//     }
-// };
-
 module.exports.googleLoginUser = async (req, res) => {
-  const { credential } = req.body;
-  
-  try {
-    const ticket = await client.verifyIdToken({
-      idToken: credential,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
+    const { credential } = req.body;
 
-    const payload = ticket.getPayload();
-    const { sub, email, given_name, family_name } = payload;
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
 
-    let user = await userModel.findOne({ email });
+        const payload = ticket.getPayload();
+        const { sub, email, given_name, family_name } = payload;
 
-    if (!user) {
-      user = await userService.createGoogleUser({
-        firstname: given_name,
-        lastname: family_name,
-        email,
-        googleId: sub,
-        isEmailVerified: true,
-      });
-    } else {
-      // Update existing user with Google info
-      if (!user.googleId) {
-        user.googleId = sub;
-        user.isEmailVerified = true;
-        await user.save();
-      }
-    }
+        let user = await userModel.findOne({ email });
 
-    const token = user.generateAuthToken();
-    
-    // Set secure cookie in production
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      maxAge: 24 * 60 * 60 * 1000 // 24 hours
-    });
-
-    res.status(200).json({
-      success: true,
-      token,
-      user: {
-        _id: user._id,
-        email: user.email,
-        fullname: {
-          firstname: user.firstname,
-          lastname: user.lastname
+        if (!user) {
+            user = await userService.createGoogleUser({
+            firstname: given_name,
+            lastname: family_name,
+            email,
+            googleId: sub,
+            isEmailVerified: true,
+        });
+        } else {
+            // Update existing user with Google info
+            if (!user.googleId) {
+                user.googleId = sub;
+                user.isEmailVerified = true;
+                await user.save();
+            }
         }
-      }
-    });
 
-  } catch (error) {
-    console.error('Google login error:', error);
-    res.status(401).json({
-      success: false,
-      message: 'Google authentication failed',
-      error: error.message
-    });
-  }
+        const token = user.generateAuthToken();
+        
+        res.cookie('token', token);
+        res.status(200).json({ token, user });
+
+    } catch (error) {
+        console.error('Google login error:', error);
+        res.status(401).json({ message: 'Invalid Google token' });
+    }
 };
