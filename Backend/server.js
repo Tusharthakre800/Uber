@@ -1,21 +1,13 @@
 const http = require('http');
 const app = require('./app');
-const { initializeSocket}  = require("./socket")
-const PORT = process.env.PORT || 3000
+const { initializeSocket } = require("./socket");
 
-// Add at the top after imports
-const cluster = require('cluster');
-const process = require('process');
+// Remove the conflicting process import
+const PORT = process.env.PORT || 3000;
 
 const server = http.createServer(app);
 
 initializeSocket(server);
-
-
-// Add after server.listen()
-if (process.send) {
-  process.send('ready');
-}
 
 // Graceful shutdown for PM2
 process.on('SIGINT', async () => {
