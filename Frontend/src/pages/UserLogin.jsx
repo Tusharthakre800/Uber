@@ -177,7 +177,7 @@ function UserLogin() {
   return (
     <div 
       ref={containerRef}
-      className={`min-h-screen flex items-center justify-center p-4 transition-all duration-500 ${
+      className={`min-h-screen flex items-center justify-center p- transition-all ease-in-out duration-500 m ${
         isDarkMode 
           ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' 
           : 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'
